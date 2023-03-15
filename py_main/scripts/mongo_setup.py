@@ -15,7 +15,7 @@ def food_scrapping(client: pymongo.MongoClient):
     links_part = [str(a).split('href=')[1].split(" ")[0][1:-3] for a in contents]
     full_links = [sites + l for l in links_part]
     names = ["_".join(n.split('/')[-1][:-8].split('-')[:-1]) for n in full_links]
-    docs = [{'source_name':n, 'url': u} for u, n in zip(full_links, names)]
+    docs = [{'source_name': n, 'url': u} for u, n in zip(full_links, names)]
     client['recipes']['sources'].insert_many(docs)
     client['recipes']['sources'].delete_one({'site_name': 'food'})
 
@@ -34,4 +34,3 @@ if __name__ == '__main__':
     add_dict = [{'source_name': name, 'url': url} for name, url in zip(names, sites)]
     collection.insert_many(add_dict)
     food_scrapping(client)
-
