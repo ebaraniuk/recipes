@@ -1,7 +1,7 @@
 import pymongo
 import os
 
-from py_main.web_scrapping.page_parser import PageParser
+from recipes.py_main.web_scrapping.page_parser import PageParser
 
 
 def food_scrapping(client: pymongo.MongoClient):
@@ -17,10 +17,11 @@ def food_scrapping(client: pymongo.MongoClient):
     names = ["_".join(n.split('/')[-1][:-8].split('-')[:-1]) for n in full_links]
     docs = [{'source_name': n, 'url': u} for u, n in zip(full_links, names)]
     client['recipes']['sources'].insert_many(docs)
-    client['recipes']['sources'].delete_one({'site_name': 'food'})
+    client['recipes']['sources'].delete_one({'source_name': 'food'})
 
 
 if __name__ == '__main__':
+    print('Hello!')
     mongo_path = 'mongodb://localhost:27017'
     client = pymongo.MongoClient(mongo_path)
     sites_db = client['recipes']
@@ -34,3 +35,4 @@ if __name__ == '__main__':
     add_dict = [{'source_name': name, 'url': url} for name, url in zip(names, sites)]
     collection.insert_many(add_dict)
     food_scrapping(client)
+
